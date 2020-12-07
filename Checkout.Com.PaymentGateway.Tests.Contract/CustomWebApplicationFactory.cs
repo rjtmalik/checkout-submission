@@ -18,22 +18,15 @@ namespace Checkout.Com.PaymentGateway.Tests.Contract
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             var queryServiceMock = new Mock<IQueryService>();
-            var commandServiceMock = new Mock<ICommandService>();
-            var processor = new Mock<IProcessor>();
 
             queryServiceMock.Setup(x => x.GetAsync(It.Is<Guid>(x => x == Guid.Parse("02599216-92e5-416b-80d7-a0fc579072b5"))))
                 .ReturnsAsync(new Models.Payment());
             queryServiceMock.Setup(x => x.GetAsync(It.Is<Guid>(x => x == Guid.Parse("02599216-92e5-416b-80d7-a0fc579072b6"))))
                 .ThrowsAsync(new PaymentNotFoundException("payment not found"));
 
-            processor.Setup(x => x.IsAppropriateProcessor(It.IsAny<string>())).Returns(true);
-            processor.Setup(x => x.ProcessAsync(It.IsAny<DM.Payment>())).ReturnsAsync(new DM.PaymentStatus() { PublicId = Guid.NewGuid() });
-
             builder.ConfigureServices(services =>
             {
                 services.AddScoped<IQueryService>(serviceProvider => queryServiceMock.Object);
-                services.AddScoped<ICommandService>(serviceProvider => commandServiceMock.Object);
-                services.AddScoped<IProcessor>(serviceProvider => processor.Object);
             });
         }
     }

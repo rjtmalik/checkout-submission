@@ -62,6 +62,9 @@ If database and external services are available, they are to be configured in `a
 ## Deployment
 For deploying the application, the yml file has been added to the project.
 
+## Client
+The apis can be invoked using the client dll for which the code is present in `Checkout.Com.PaymentGateway.Client`
+
 ## Security(Vulenrabilities)
 * The endpoints are currently open and no token is required to hit them.
 * There are no authorization checks on the endpoints and any one can create or view a payment

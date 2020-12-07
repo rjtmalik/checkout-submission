@@ -22,31 +22,6 @@ namespace Checkout.Com.PaymentGateway.Tests.Contract
         }
 
         [Fact]
-        public async Task Post_EndpointsReturnSuccess()
-        {
-            // Act
-            var msg = new HttpRequestMessage(HttpMethod.Post, "api/payments");
-            msg.Content = new StringContent(
-               JsonConvert.SerializeObject(new
-               {
-                   card = new
-                   {
-                       number = "4111 1111 1111 1111",
-                       expiry = "12/2021",
-                       cvv = 123
-                   },
-                   amount = 1,
-                   currency = "EUR"
-               }),
-               Encoding.UTF8,
-               "application/json");
-            var response = await _client.SendAsync(msg);
-
-            // Assert
-            Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
-        }
-
-        [Fact]
         public async Task Post_EndpointsReturn400_wheninvalidexpiry()
         {
             // Act
