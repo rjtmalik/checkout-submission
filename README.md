@@ -51,10 +51,13 @@ This has the consumer driven contract tests for the http endpoints
 * Checkout.Com.PaymentGateway.Tests.Unit
 This has the unit tests for the services.
 
+# Startup project
+Checkout.Com.PaymentGateway.API
+
 # Debugging and Development
 If database and external services are still unavailable, then
 ```sh
-cd Checkout.Com.PaymentGateway.API\MockedExternalDependencies 
+cd MockedExternalDependencies 
 docker-compose up --build
 ```
 If database and external services are available, they are to be configured in `appsettings.json`
