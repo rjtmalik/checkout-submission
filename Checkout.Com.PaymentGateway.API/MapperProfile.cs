@@ -33,7 +33,8 @@ namespace Checkout.Com.PaymentGateway.API
                 .ForMember((dest) => dest.MaskedNumber, opt => opt.MapFrom(src => string.Concat(new string(Enumerable.Repeat('X', src.Number.Length - 3).ToArray()), src.Number.Substring(src.Number.Length - 3, 3))));
 
             CreateMap<DBMODEL.Card, DM.Card>()
-                .ForMember((dest) => dest.Number, opt => opt.MapFrom(src => src.MaskedNumber));
+                .ForMember((dest) => dest.Number, opt => opt.MapFrom(src => src.MaskedNumber))
+                .ForMember((dest) => dest.CVV, opt => opt.MapFrom(src => 0));
 
             CreateMap<SM.Payment, DM.Payment>().ReverseMap();
             CreateMap<SM.Card, DM.Card>()
@@ -42,7 +43,7 @@ namespace Checkout.Com.PaymentGateway.API
                 .ForMember((dest) => dest.ExpiryYear, opt => opt.MapFrom(src => src.Expiry.Split(new char[] { '/' }, StringSplitOptions.None)[1]));
 
             CreateMap<DM.Card, SM.Card>()
-                .ForMember((dest) => dest.Expiry, opt => opt.MapFrom(src => $"{src.ExpiryMonth}/{src.ExpiryYear}"  ));
+                .ForMember((dest) => dest.Expiry, opt => opt.MapFrom(src => $"{src.ExpiryMonth}/{src.ExpiryYear}"));
         }
     }
 }
