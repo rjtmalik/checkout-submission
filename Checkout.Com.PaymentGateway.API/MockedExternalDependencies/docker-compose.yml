@@ -1,0 +1,22 @@
+version: "3"
+services:
+  database:
+    image: 'mongo'
+    container_name: 'mongo-container'
+    volumes: 
+     - ./mongo-volume:/data/db
+    ports:
+        - '27017:27017'
+  visa: 
+    build: 
+      context: .
+      dockerfile: Visa/stubs.Dockerfile
+    ports:
+    - 1010:1010
+  
+  mastercard: 
+    build: 
+      context: .
+      dockerfile: MasterCard/stubs.Dockerfile
+    ports:
+    - 2020:2020

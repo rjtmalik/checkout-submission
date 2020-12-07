@@ -1,0 +1,51 @@
+trigger:
+ branches:
+    include:
+    - main
+
+pr: 
+ branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'windows-2019'
+
+variables: 
+  buildConfiguration: 'Release'
+
+jobs:
+
+- job: BuildJob
+  steps:
+  
+  - task: NuGetCommand@2
+    inputs:
+      command: 'restore'
+      restoreSolution: '**/*.sln'
+      feedsToUse: 'select'
+      vstsFeed: 'd652cbfd-10f4-4bd1-b770-5efbeb04e3f3/72e95ed2-717c-471a-8893-3f73a01a7572'
+      
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      projects: 'Checkout.Com.PaymentGateway.Tests.Unit/Checkout.Com.PaymentGateway.Tests.Unit.csproj'
+      arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      projects: 'Checkout.Com.PaymentGateway.Tests.Contract/Checkout.Com.PaymentGateway.Tests.Contract.csproj'
+      arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: true
+      arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+      zipAfterPublish: true
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)'
+      artifactName: WebApp-$(Build.SourceBranchName)-$(Build.Reason)-$(Build.SourceVersion)
